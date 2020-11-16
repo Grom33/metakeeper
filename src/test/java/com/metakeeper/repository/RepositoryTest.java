@@ -21,9 +21,6 @@ public class RepositoryTest<T extends BaseModel> extends TestRunner {
 
     protected final Repository<T> repository;
 
-    @Container
-    private static final ArangoContainer container = getContainer();
-
     public RepositoryTest(Repository<T> repository) {
         this.repository = repository;
     }

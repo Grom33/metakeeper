@@ -11,9 +11,11 @@ import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.testcontainers.arangodb.containers.ArangoContainer;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
+import org.testcontainers.junit.jupiter.Container;
 
 import javax.inject.Inject;
 
@@ -29,6 +31,9 @@ class PrototypeControllerTest extends RepositoryTest<Prototype> {
     @Inject
     @Client("/")
     RxHttpClient client;
+
+    @Container
+    private static final ArangoContainer container = getContainer();
 
     @Inject
     public PrototypeControllerTest(Repository<Prototype> repository) {
