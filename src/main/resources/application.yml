@@ -1,0 +1,20 @@
+micronaut:
+  application:
+    name: metakeeper
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:/swagger-ui
+        mapping: /swagger-ui/**
+
+
+arangodb:
+  host: ${ARANGO_HOST}
+  port: ${ARANGO_PORT}
+  database: ${ARANGO_DB}
+  user: ${ARANGO_USER:}
+  password: ${ARANGO_PASS:}
+  create-database-if-not-exist: true

@@ -1,0 +1,99 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "6.0.0"
+    id "io.micronaut.application" version '1.0.5'
+    id 'io.swagger.core.v3.swagger-gradle-plugin' version '2.1.4'
+}
+
+version "0.1"
+group "com.metakeeper"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+resolve {
+    outputFileName = 'metakeeper' // same as micronaut swagger file
+    outputFormat = 'YAML'
+    prettyPrint = 'TRUE'
+    encoding = 'UTF-8'
+    classpath = sourceSets.main.runtimeClasspath
+    resourcePackages = ['com.metakeeper']
+    readAllResources = 'FALSE'
+    outputDir = file('build/classes/java/main/META-INF/swagger/') // as micronaut swagger dir path
+}
+
+micronaut {
+    runtime "netty"
+    testRuntime "junit5"
+    processing {
+        incremental true
+        annotations "com.metakeeper.*"
+    }
+}
+
+dependencies {
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    annotationProcessor 'io.micronaut:micronaut-inject-java'
+    implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("javax.annotation:javax.annotation-api")
+    compile 'io.micronaut:micronaut-http-client'
+    compile 'io.micronaut:micronaut-http-server-netty'
+
+    //Security
+    //implementation("io.micronaut.security:micronaut-security-ldap")
+
+
+    compile 'com.arangodb:arangodb-java-driver:6.7.5'
+    compile 'com.github.goodforgod:micronaut-arangodb:2.1.0'
+    implementation("io.swagger.core.v3:swagger-annotations")
+    compileOnly 'io.swagger.core.v3:swagger-core'
+    runtimeOnly("ch.qos.logback:logback-classic")
+
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    compile 'org.jetbrains:annotations:19.0.0'
+
+    testCompile 'io.micronaut:micronaut-http-client'
+    testImplementation("io.micronaut.test:micronaut-test-junit5")
+    testImplementation(platform("org.testcontainers:testcontainers-bom:1.14.3"))
+    testCompileOnly 'org.projectlombok:lombok:1.18.16'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+    testCompile 'org.testcontainers:junit-jupiter:1.14.3'
+
+    testCompile 'com.github.goodforgod:arangodb-testcontainer:1.2.0'
+}
+
+mainClassName = "com.metakeeper.Application"
+java {
+    sourceCompatibility = JavaVersion.toVersion('11')
+    targetCompatibility = JavaVersion.toVersion('11')
+}
+
+
+run {
+    environment([
+            "ARANGO_HEALTH_CLUSTER"      : "$arangoHealthCluster",
+            "ARANGO_HOST"                : "$arangoHost",
+            "ARANGO_PORT"                : "$arangoPort",
+            "ARANGO_DB"                  : "$arangoDb",
+            "ARANGO_USER"                : "$arangoUser",
+            "ARANGO_PASS"                : "$arangoPassword",
+    ])
+}
+
+test {
+    useJUnitPlatform()
+    environment([
+            "ARANGO_HEALTH_CLUSTER"      : "$arangoHealthCluster",
+            "ARANGO_HOST"                : "$arangoHost",
+            "ARANGO_PORT"                : "$arangoTestPort",
+            "ARANGO_DB"                  : "$arangoDb",
+            "ARANGO_USER"                : "$arangoUser",
+            "ARANGO_PASS"                : "$arangoPassword",
+    ])
+}
+
+
