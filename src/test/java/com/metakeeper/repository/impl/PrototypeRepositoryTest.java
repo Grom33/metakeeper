@@ -3,8 +3,10 @@ package com.metakeeper.repository.impl;
 import com.metakeeper.model.Prototype;
 import com.metakeeper.repository.RepositoryTest;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.testcontainers.arangodb.containers.ArangoContainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
+import org.testcontainers.junit.jupiter.Container;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -23,6 +25,8 @@ import static com.metakeeper.TestDataGenerator.getRandomNumber;
 @MicronautTest
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 class PrototypeRepositoryTest extends RepositoryTest<Prototype> {
+    @Container
+    private static final ArangoContainer container = getContainer();
 
     @Inject
     public PrototypeRepositoryTest(PrototypeRepository repository) {
